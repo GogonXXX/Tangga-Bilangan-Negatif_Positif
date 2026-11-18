@@ -87,7 +87,7 @@
             background: #2d3436;
             overflow: visible;
             padding: 12px 8px 12px 10px;
-            gap: 8px;
+            gap: 12px;
         }
 
         /* --- PANEL KIRI --- */
@@ -285,7 +285,7 @@
         }
         .answer-area .control-group label { color: #ffeaa7; }
 
-        /* --- AREA TENGAH: TERMOMETER --- */
+        /* --- AREA TENGAH: TERMOMETER (geser kiri 15%) --- */
         .thermometer-container {
             flex: 1;
             display: flex;
@@ -295,6 +295,7 @@
             padding: 10px 0;
             min-height: 420px;
             min-width: 120px;
+            transform: translateX(-15%);
         }
 
         .thermometer-wrapper { 
@@ -407,7 +408,7 @@
         .marker-naik { background: #d63031; } 
         .marker-turun { background: #0984e3; } 
 
-        /* --- FLOATING RESULT: pojok kiri bawah, sejajar ujung bawah termometer --- */
+        /* --- FLOATING RESULT: pojok kiri bawah, ikut bergeser --- */
         .floating-result {
             position: absolute;
             left: 0;
@@ -494,7 +495,6 @@
         </div>
 
         <div class="thermometer-container">
-            <!-- Floating result dipindah ke kiri bawah -->
             <div class="floating-result" id="floatingResult">
                 <div class="float-item">Awal: <span id="displayStart" class="text-orange">0°</span></div>
                 <div class="float-item">Operasi: <span id="displayChange" class="text-white">-</span></div>
