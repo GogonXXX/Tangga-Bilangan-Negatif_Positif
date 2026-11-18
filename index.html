@@ -15,37 +15,46 @@
             -webkit-tap-highlight-color: transparent;
         }
 
+        html, body {
+            height: 100%;
+        }
+
         body {
             background-color: #1e272e;
-            height: 100vh;
+            min-height: 100vh;
+            min-height: 100dvh;
             display: flex;
             justify-content: center;
-            align-items: center;
-            padding: 10px;
+            align-items: flex-start;
+            padding: 8px;
             color: white;
-            overflow: hidden;
+            overflow-y: auto;
+            overflow-x: hidden;
         }
 
         .app-container {
             background: #2d3436;
             width: 100%;
             max-width: 480px;
-            height: 100%;
-            max-height: 850px;
+            min-height: calc(100dvh - 16px);
             border-radius: 16px;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
-            overflow: hidden;
             display: flex;
             flex-direction: column;
             position: relative;
+            overflow: visible;
         }
 
+        /* --- HEADER & TABS --- */
         .header {
             background: #0984e3;
             padding: 10px;
             text-align: center;
             flex-shrink: 0;
             z-index: 20;
+            border-radius: 16px 16px 0 0;
+            position: sticky;
+            top: 0;
         }
         .header h1 { font-size: 16px; color: white; margin-bottom: 8px;}
         
@@ -70,24 +79,24 @@
         }
         .tab-btn.active { background: #fdcb6e; color: #2d3436; }
 
+        /* --- LAYOUT UTAMA --- */
         .main-layout {
             flex: 1;
-            position: relative;
             display: flex;
+            flex-direction: row;
             background: #2d3436;
-            overflow: hidden;
+            overflow: visible;
+            padding: 12px 8px 12px 10px;
+            gap: 8px;
         }
 
+        /* --- PANEL KIRI --- */
         .left-panel {
-            position: absolute;
-            top: 15px;
-            left: 10px;
-            z-index: 20;
             display: flex;
             flex-direction: column;
             gap: 6px;
             width: 265px;
-            height: calc(100% - 30px);
+            flex-shrink: 0;
         }
 
         .question-box {
@@ -106,6 +115,7 @@
         .question-box span { color: #d63031; font-weight: 800; }
         .question-box small { display: block; margin-top: 4px; }
 
+        /* --- JAM --- */
         .clock-container {
             display: none;
             justify-content: center;
@@ -189,6 +199,7 @@
         .hand.minute { width: 7.4px; height: 94px; margin-left: -3.7px; background: #0984e3; }
         .hand.second { width: 3.6px; height: 113px; margin-left: -1.8px; background: #d63031; }
 
+        /* --- 4 TOMBOL KONTROL --- */
         .clock-controls {
             display: none;
             grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -233,6 +244,7 @@
         .clock-controls button:disabled { background: #636e72; cursor: not-allowed; }
         .clock-controls select { padding: 2px; font-size: 10px; }
 
+        /* --- KONTROL MODE 1 --- */
         .floating-controls {
             display: flex;
             flex-direction: column;
@@ -265,19 +277,30 @@
         .btn-check { background: #e17055; }
         .btn-check:active { background: #d63031; }
 
+        /* --- AREA JAWABAN --- */
+        .answer-area {
+            display: none;
+            width: 100%;
+            margin-top: 4px;
+        }
+        .answer-area .control-group label { color: #ffeaa7; }
+
+        /* --- AREA TENGAH: TERMOMETER --- */
         .thermometer-container {
             flex: 1;
             display: flex;
             justify-content: center;
-            align-items: center;
+            align-items: stretch;
             position: relative;
-            padding: 20px 0;
-            margin-left: 150px;
+            padding: 10px 0;
+            min-height: 420px;
+            min-width: 120px;
         }
 
         .thermometer-wrapper { 
             position: relative; 
-            height: 95%;
+            height: 100%;
+            min-height: 400px;
             display: flex; 
             align-items: center;
             padding-left: 50px;
@@ -286,6 +309,7 @@
         .thermometer-tube {
             width: 24px; 
             height: 100%;
+            min-height: 380px;
             background: #636e72;
             border-radius: 12px; 
             position: relative;
@@ -383,35 +407,28 @@
         .marker-naik { background: #d63031; } 
         .marker-turun { background: #0984e3; } 
 
+        /* --- FLOATING RESULT: pojok kiri bawah, sejajar ujung bawah termometer --- */
         .floating-result {
             position: absolute;
-            right: 10px; 
-            top: 50%;
-            transform: translateY(-50%);
+            left: 0;
+            bottom: 0;
             text-align: left;
             pointer-events: none;
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 4px;
             z-index: 20;
+            background: rgba(45,52,54,0.85);
+            padding: 6px 8px;
+            border-radius: 6px;
         }
-        .float-item { font-size: 11px; color: #b2bec3; }
-        .float-item span { display: block; font-size: 18px; font-weight: 800; }
+        .float-item { font-size: 10px; color: #b2bec3; }
+        .float-item span { display: block; font-size: 16px; font-weight: 800; }
         
         .text-orange { color: #e67e22; } 
         .text-red { color: #ff7675; } 
         .text-blue { color: #74b9ff; } 
         .text-white { color: #ffffff; } 
-
-        .answer-area {
-            position: absolute;
-            bottom: calc(15px + 4%);
-            left: 10px;
-            width: 265px;
-            z-index: 20;
-            display: none;
-        }
-        .answer-area .control-group label { color: #ffeaa7; }
 
     </style>
 </head>
@@ -465,18 +482,19 @@
                 </div>
             </div>
 
+            <div class="answer-area" id="answerArea">
+                <div class="control-group">
+                    <label id="answerLabel">Suhu Akhir (°C)</label>
+                    <input type="number" id="mainAnswer" placeholder="?">
+                </div>
+                <button class="btn-mini btn-check" onclick="checkMainAnswer()">Cek</button>
+            </div>
+
             <div class="floating-controls" id="leftMenu"></div>
         </div>
 
-        <div class="answer-area" id="answerArea">
-            <div class="control-group">
-                <label id="answerLabel">Suhu Akhir (°C)</label>
-                <input type="number" id="mainAnswer" placeholder="?">
-            </div>
-            <button class="btn-mini btn-check" onclick="checkMainAnswer()">Cek</button>
-        </div>
-
         <div class="thermometer-container">
+            <!-- Floating result dipindah ke kiri bawah -->
             <div class="floating-result" id="floatingResult">
                 <div class="float-item">Awal: <span id="displayStart" class="text-orange">0°</span></div>
                 <div class="float-item">Operasi: <span id="displayChange" class="text-white">-</span></div>
@@ -543,19 +561,14 @@
 
     let animTimer = null;
 
-    // ===== KONVERSI JAM → SUDUT KUMULATIF (UNWRAPPED) =====
-    // 11 → 330°, 12 → 360°, 13 → 390°, 14 → 420°
-    // TIDAK pakai modulo 12 agar jarum selalu maju searah jarum jam
     function hourToAngleUnwrapped(h) {
         return h * 30;
     }
 
-    // ===== FORMAT JAM INDONESIA =====
     function formatJam(h) {
         return String(h).padStart(2, '0') + ".00";
     }
 
-    // ===== ANIMASI GO =====
     function runClockMode() {
         if (currentMode !== 3) return;
         if (isAnimating) return;
@@ -604,7 +617,6 @@
         activeStartPos = mode3.startTemp;
         expectedAnswer = endTemp;
 
-        // Reset jarum ke posisi awal — pakai sudut UNWRAPPED
         hourHand.style.transition = 'none';
         minuteHand.style.transition = 'none';
         secondHand.style.transition = 'none';
@@ -616,7 +628,6 @@
         minuteHand.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
         secondHand.style.transition = 'transform 0.8s cubic-bezier(0.4, 0, 0.2, 1)';
 
-        // Pertanyaan
         const arah = sign > 0 ? "naik" : "turun";
         const jamAwal  = formatJam(sh);
         const jamAkhir = formatJam(eh);
@@ -644,7 +655,6 @@
         animateClock(sh, eh, unit, duration, rate, sign);
     }
 
-    // ===== ANIMASI BERTAHAP =====
     function animateClock(startH, endH, unit, duration, rate, sign) {
         isAnimating = true;
         btnGo.disabled = true;
@@ -662,9 +672,7 @@
             visualSteps = Math.min(duration * 3600, 12);
         }
 
-        // Sudut AWAL jarum jam (unwrapped)
         const startHourAngle = hourToAngleUnwrapped(startH);
-        // Sudut AKHIR jarum jam (unwrapped) — selalu lebih besar dari start
         const endHourAngle = hourToAngleUnwrapped(endH);
 
         let step = 0;
@@ -674,25 +682,22 @@
             const progress = step / visualSteps;
 
             if (unit === 'jam') {
-                // Setiap step = 1 jam → sudut naik 30° (unwrapped)
                 const currentHourAngle = startHourAngle + step * 30;
                 hourHand.style.transform = `rotate(${currentHourAngle}deg)`;
                 minuteHand.style.transform = `rotate(0deg)`;
                 secondHand.style.transform = `rotate(0deg)`;
             } else if (unit === 'menit') {
-                // Jarum menit berputar proporsional, jarum jam bergerak halus
                 const totalMinutes = duration * 60;
                 const currentMinute = progress * totalMinutes;
-                const angleMinute = currentMinute * 6;  // 6°/menit, unwrapped
+                const angleMinute = currentMinute * 6;
                 minuteHand.style.transform = `rotate(${angleMinute}deg)`;
-                // Jarum jam bergerak dari startHourAngle ke endHourAngle
                 const hourAngle = startHourAngle + progress * (endHourAngle - startHourAngle);
                 hourHand.style.transform = `rotate(${hourAngle}deg)`;
                 secondHand.style.transform = `rotate(0deg)`;
             } else if (unit === 'detik') {
                 const totalSeconds = duration * 3600;
                 const currentSecond = progress * totalSeconds;
-                const angleSecond = currentSecond * 6;  // unwrapped
+                const angleSecond = currentSecond * 6;
                 secondHand.style.transform = `rotate(${angleSecond}deg)`;
                 const minuteProg = currentSecond / 60;
                 minuteHand.style.transform = `rotate(${minuteProg * 6}deg)`;
@@ -700,7 +705,6 @@
                 hourHand.style.transform = `rotate(${hourAngle}deg)`;
             }
 
-            // Sinkronkan termometer
             const newTemp = startTemp + (rate * progress * duration * sign);
             const clamped = Math.max(MIN_VAL, Math.min(newTemp, MAX_VAL));
             currentValue = clamped;
@@ -713,7 +717,6 @@
                 btnGo.disabled = false;
                 btnGo.innerText = 'GO';
 
-                // Posisi akhir — pakai sudut UNWRAPPED
                 hourHand.style.transform   = `rotate(${endHourAngle}deg)`;
                 minuteHand.style.transform = `rotate(0deg)`;
                 secondHand.style.transform = `rotate(0deg)`;
@@ -724,7 +727,6 @@
         }, stepDuration);
     }
 
-    // ===== INIT CLOCK =====
     function initClock() {
         const toRemove = clockFace.querySelectorAll('.clock-number, .clock-tick');
         toRemove.forEach(el => el.remove());
@@ -760,7 +762,6 @@
         }
     }
 
-    // ===== DRAG JARUM MANUAL (tetap ada untuk eksplorasi) =====
     let activeHand = null;
     function startHandDrag(e, handType) {
         if (isAnimating) return;
@@ -818,7 +819,6 @@
     document.addEventListener('mouseup', endHandDrag);
     document.addEventListener('touchend', endHandDrag);
 
-    // ===== TICK TERMOMETER =====
     function initTicks() {
         document.querySelectorAll('.tick-container').forEach(el => el.remove());
         whiteArrows = {}; 
@@ -924,7 +924,6 @@
     document.addEventListener('mouseup', endDrag);
     document.addEventListener('touchend', endDrag);
 
-    // ===== MODE SWITCH =====
     function switchMode(mode) {
         if (animTimer) { clearInterval(animTimer); animTimer = null; }
         isAnimating = false;
@@ -1032,7 +1031,6 @@
             activeStartPos = startTemp;
             expectedAnswer = endTemp;
 
-            // Reset jarum ke posisi awal — unwrapped
             hourHand.style.transform   = `rotate(${hourToAngleUnwrapped(startHour)}deg)`;
             minuteHand.style.transform = `rotate(0deg)`;
             secondHand.style.transform = `rotate(0deg)`;
