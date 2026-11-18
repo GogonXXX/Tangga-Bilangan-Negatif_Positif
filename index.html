@@ -285,7 +285,7 @@
         }
         .answer-area .control-group label { color: #ffeaa7; }
 
-        /* --- AREA TENGAH: TERMOMETER (geser kiri 15%) --- */
+        /* --- AREA TENGAH: TERMOMETER (geser kiri total -25%) --- */
         .thermometer-container {
             flex: 1;
             display: flex;
@@ -295,7 +295,7 @@
             padding: 10px 0;
             min-height: 420px;
             min-width: 120px;
-            transform: translateX(-15%);
+            transform: translateX(-25%);
         }
 
         .thermometer-wrapper { 
@@ -408,23 +408,35 @@
         .marker-naik { background: #d63031; } 
         .marker-turun { background: #0984e3; } 
 
-        /* --- FLOATING RESULT: pojok kiri bawah, ikut bergeser --- */
+        /* --- FLOATING RESULT: horizontal, geser 15% ke kiri --- */
         .floating-result {
             position: absolute;
             left: 0;
             bottom: 0;
-            text-align: left;
-            pointer-events: none;
+            transform: translateX(-15%);   /* geser 15% ke kiri dari posisi container */
             display: flex;
-            flex-direction: column;
-            gap: 4px;
+            flex-direction: row;
+            align-items: flex-end;
+            gap: 8px;
             z-index: 20;
             background: rgba(45,52,54,0.85);
-            padding: 6px 8px;
+            padding: 5px 8px;
             border-radius: 6px;
+            white-space: nowrap;
         }
-        .float-item { font-size: 10px; color: #b2bec3; }
-        .float-item span { display: block; font-size: 16px; font-weight: 800; }
+        .float-item { 
+            font-size: 10px; 
+            color: #b2bec3;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: 1.2;
+        }
+        .float-item span { 
+            display: block; 
+            font-size: 15px; 
+            font-weight: 800; 
+        }
         
         .text-orange { color: #e67e22; } 
         .text-red { color: #ff7675; } 
